@@ -1,27 +1,23 @@
 // src/firebase/firebase.js
-
-// 1️⃣ Импорты из Firebase
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase, serverTimestamp } from "firebase/database";
 
-// 2️⃣ Конфиг проекта (замени на свой из Firebase Console)
+// Firebase configuration using Vite environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyAgf8H8TskHD1pXrVK1H8mdjIjLhMGzaOA",
-  authDomain: "contactbook-3ea5d.firebaseapp.com",
-  databaseURL: "https://contactbook-3ea5d-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "contactbook-3ea5d",
-  storageBucket: "contactbook-3ea5d.firebasestorage.app",
-  messagingSenderId: "461845570644",
-  appId: "1:461845570644:web:b604be2565048e7355f9c1",
-  measurementId: "G-3QXPNYDZFP"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-
-// 3️⃣ Инициализация приложения Firebase
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// 4️⃣ Экспорт объектов для использования в проекте
-export const auth = getAuth(app);       // для регистраций и логина
-export const db = getDatabase(app);     // для работы с Realtime Database
-export const ts = serverTimestamp;      // если нужно ставить createdAt
+// Export Firebase services
+export const auth = getAuth(app);
+export const db = getDatabase(app);
+export const ts = serverTimestamp;
