@@ -1,3 +1,5 @@
+// FILE: src/main.jsx (ОНОВЛЕНО)
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -6,15 +8,13 @@ import { store } from './redux/store';
 import App from './App';
 import './App.css';
 
-// 1. Визначте базовий шлях
-// Приклад: якщо ваш репозиторій називається "ContactBook-MaterialExpressiveNew",
-// то basename буде "/ContactBook-MaterialExpressiveNew"
-const basename = "/ContactBook-MaterialExpressiveNew";
+// Використовуємо базовий шлях, визначений у vite.config.js
+const BASENAME = '/ContactBook-MaterialExpressive/';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-      {/* 2. Передайте його до компонента BrowserRouter як властивість basename */}
-      <BrowserRouter basename={basename}>
+      {/* Встановлення basename тут дозволяє використовувати короткі шляхи у App.jsx */}
+      <BrowserRouter basename={BASENAME}>
         <Provider store={store}>
           <App />
         </Provider>

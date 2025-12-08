@@ -1,3 +1,5 @@
+// FILE: src/App.jsx (ОНОВЛЕНО)
+
 import {useEffect, useState} from 'react';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import {onAuthStateChanged} from 'firebase/auth';
@@ -35,26 +37,28 @@ function App() {
 
   return (
       <Routes>
+        {/* Кореневий шлях репозиторію (використовує basename) */}
         <Route
             path="/"
             element={user ? <Navigate to="/contacts" replace/> : <Navigate to="/login" replace/>}
         />
-        <Route
-            path="/"
-            element={user ? <Navigate to="/contacts" replace/> : <Navigate to="/login" replace/>}
-        />
+        {/* /ContactBook-MaterialExpressive/login */}
         <Route
             path="/login"
             element={user ? <Navigate to="/contacts" replace/> : <Login/>}
         />
+        {/* /ContactBook-MaterialExpressive/register */}
         <Route
             path="/register"
             element={user ? <Navigate to="/contacts" replace/> : <Register/>}
         />
+        {/* /ContactBook-MaterialExpressive/contacts */}
         <Route
             path="/contacts"
             element={user ? <Contacts/> : <Navigate to="/login" replace/>}
         />
+
+        {/* Видалено дублюючий шлях "/ContactBook-MaterialExpressive/" */}
       </Routes>
   );
 }
