@@ -6,13 +6,19 @@ import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); // <--- Перевіряємо це
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleRegister(e) {
     e.preventDefault();
+
+    // ДОДАНА ПЕРЕВІРКА: Переконайтеся, що всі поля заповнені
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      alert("Please fill in all fields (Name, Email, and Password).");
+      return;
+    }
 
     if (password.length < 6) {
       alert("Password must be at least 6 characters");
