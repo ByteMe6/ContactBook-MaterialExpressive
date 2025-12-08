@@ -36,24 +36,24 @@ function App() {
   return (
       <Routes>
         <Route
-            path="/ContactBook-MaterialExpressive/"
-            element={user ? <Navigate to="/ContactBook-MaterialExpressive/contacts" replace/> : <Navigate to="/ContactBook-MaterialExpressive/login" replace/>}
+            path="/"
+            element={user ? <Navigate to="/contacts" replace/> : <Navigate to="/login" replace/>}
         />
         <Route
             path="/"
-            element={user ? <Navigate to="/ContactBook-MaterialExpressive/contacts" replace/> : <Navigate to="/ContactBook-MaterialExpressive/login" replace/>}
+            element={user ? <Navigate to="/contacts" replace/> : <Navigate to="/login" replace/>}
         />
         <Route
-            path="/ContactBook-MaterialExpressive/login"
-            element={user ? <Navigate to="/ContactBook-MaterialExpressive/contacts" replace/> : <Login/>}
+            path="/login"
+            element={user ? <Navigate to="/contacts" replace/> : <Login/>}
         />
         <Route
             path="/register"
-            element={user ? <Navigate to="/ContactBook-MaterialExpressive/contacts" replace/> : <Register/>}
+            element={user ? <Navigate to="/contacts" replace/> : <Register/>}
         />
         <Route
-            path="/ContactBook-MaterialExpressive/contacts"
-            element={user ? <Contacts/> : <Navigate to="/ContactBook-MaterialExpressive/login" replace/>}
+            path="/contacts"
+            element={user ? <Contacts/> : <Navigate to="/login" replace/>}
         />
       </Routes>
   );
