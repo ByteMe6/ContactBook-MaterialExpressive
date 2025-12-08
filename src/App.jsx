@@ -37,7 +37,7 @@ function App() {
       <Routes>
         <Route
             path="/ContactBook-MaterialExpressive/"
-            element={user ? <Navigate to="/contacts" replace/> : <Navigate to="/login" replace/>}
+            element={user ? <Navigate to="/ContactBook-MaterialExpressive/contacts" replace/> : <Navigate to="/ContactBook-MaterialExpressive/login" replace/>}
         />
         <Route
             path="/"
