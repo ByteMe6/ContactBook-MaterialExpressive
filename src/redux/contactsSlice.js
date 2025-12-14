@@ -1,28 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { ref, get, set, push, remove } from 'firebase/database';
-import { db, auth } from '../firebase/firebase';
+import axiosInstance from '../api/axiosInstance';
 
+// Async thunks using your custom API with JWT token
 export const fetchContacts = createAsyncThunk(
     'contacts/fetchContacts',
     async (_, { rejectWithValue }) => {
       try {
-        const user = auth.currentUser;
-        if (!user) throw new Error('User not authenticated');
-
-        const contactsRef = ref(db, `users/${user.uid}/contacts`);
-        const snapshot = await get(contactsRef);
-
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          // Convert object to array with ids
-          return Object.keys(data).map(key => ({
-            id: key,
-            ...data[key]
-          }));
-        }
-        return [];
+        // JWT token automatically added by axiosInstance interceptor
+        const response = await axiosInstance.get('/contacts/');
+        return response.data;
       } catch (error) {
-        return rejectWithValue(error.message);
+        return rejectWithValue(error.response?.data?.message || 'Failed to fetch contacts');
       }
     }
 );
@@ -31,65 +19,42 @@ export const addContact = createAsyncThunk(
     'contacts/addContact',
     async (contact, { rejectWithValue }) => {
       try {
-        const user = auth.currentUser;
-        if (!user) throw new Error('User not authenticated');
-
-        const contactsRef = ref(db, `users/${user.uid}/contacts`);
-        const newContactRef = push(contactsRef);
-
-        const contactData = {
-          ...contact,
-          createdAt: Date.now()
-        };
-
-        await set(newContactRef, contactData);
-
-        return {
-          id: newContactRef.key,
-          ...contactData
-        };
+        // JWT token automatically added by axiosInstance interceptor
+        const response = await axiosInstance.post('/contacts/', contact);
+        return response.data;
       } catch (error) {
-        return rejectWithValue(error.message);
+        return rejectWithValue(error.response?.data?.message || 'Failed to add contact');
       }
     }
 );
 
 export const deleteContact = createAsyncThunk(
     'contacts/deleteContact',
-    async (contactId, { rejectWithValue }) => {
+    async (id, { rejectWithValue }) => {
       try {
-        const user = auth.currentUser;
-        if (!user) throw new Error('User not authenticated');
-
-        const contactRef = ref(db, `users/${user.uid}/contacts/${contactId}`);
-        await remove(contactRef);
-
-        return contactId;
+        // JWT token automatically added by axiosInstance interceptor
+        await axiosInstance.delete(`/contacts/${id}`);
+        return id;
       } catch (error) {
-        return rejectWithValue(error.message);
+        return rejectWithValue(error.response?.data?.message || 'Failed to delete contact');
       }
     }
 );
 
-// Slice
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState: {
     contacts: {
       items: [],
       isLoading: false,
-      error: null
+      error: null,
     },
-    filter: ''
+    filter: '',
   },
   reducers: {
     setFilter: (state, action) => {
       state.filter = action.payload;
     },
-    clearContacts: (state) => {
-      state.contacts.items = [];
-      state.contacts.error = null;
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -109,6 +74,7 @@ const contactsSlice = createSlice({
         // Add contact
         .addCase(addContact.pending, (state) => {
           state.contacts.isLoading = true;
+          state.contacts.error = null;
         })
         .addCase(addContact.fulfilled, (state, action) => {
           state.contacts.isLoading = false;
@@ -121,6 +87,7 @@ const contactsSlice = createSlice({
         // Delete contact
         .addCase(deleteContact.pending, (state) => {
           state.contacts.isLoading = true;
+          state.contacts.error = null;
         })
         .addCase(deleteContact.fulfilled, (state, action) => {
           state.contacts.isLoading = false;
@@ -132,8 +99,8 @@ const contactsSlice = createSlice({
           state.contacts.isLoading = false;
           state.contacts.error = action.payload;
         });
-  }
+  },
 });
 
-export const { setFilter, clearContacts } = contactsSlice.actions;
+export const { setFilter } = contactsSlice.actions;
 export default contactsSlice.reducer;

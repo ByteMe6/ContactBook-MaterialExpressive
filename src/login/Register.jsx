@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { ref, set } from "firebase/database";
-import { auth, db } from "../firebase/firebase";
 import { useNavigate, Link } from "react-router-dom";
+import { register } from "../api/register";
 
 export default function Register() {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState(""); // <--- Перевіряємо це
+  const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -15,8 +13,8 @@ export default function Register() {
     e.preventDefault();
 
     // ДОДАНА ПЕРЕВІРКА: Переконайтеся, що всі поля заповнені
-    if (!name.trim() || !email.trim() || !password.trim()) {
-      alert("Please fill in all fields (Name, Email, and Password).");
+    if (!name.trim() || !login.trim() || !password.trim()) {
+      alert("Please fill in all fields (Name, Login, and Password).");
       return;
     }
 
@@ -28,20 +26,19 @@ export default function Register() {
     setIsLoading(true);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      // API expects { login, password }
+      const response = await register(login, password);
 
-      await set(ref(db, `users/${user.uid}/profile`), {
-        uid: user.uid,
-        name,
-        email,
-        createdAt: Date.now(),
-      });
+      // Extract JWT token from response
+      const token = response.data.token || response.data.access_token;
+      const userData = response.data.user || { login, name };
 
+      // Save JWT token to localStorage
+      localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify({
-        uid: user.uid,
+        uid: userData.uid || userData.id,
         name,
-        email
+        login
       }));
 
       alert("Registration successful!");
@@ -50,21 +47,25 @@ export default function Register() {
       console.error("Registration error:", err);
 
       let errorMessage = "Registration failed";
-      switch (err.code) {
-        case "auth/email-already-in-use":
-          errorMessage = "Email already in use";
-          break;
-        case "auth/invalid-email":
-          errorMessage = "Invalid email address";
-          break;
-        case "auth/weak-password":
-          errorMessage = "Password is too weak";
-          break;
-        case "auth/network-request-failed":
-          errorMessage = "Network error. Check your connection.";
-          break;
-        default:
-          errorMessage = err.message;
+
+      if (err.response) {
+        switch (err.response.status) {
+          case 409:
+            errorMessage = "Login already in use";
+            break;
+          case 400:
+            errorMessage = err.response.data?.message || "Invalid login";
+            break;
+          case 500:
+            errorMessage = "Server error. Please try again later.";
+            break;
+          default:
+            errorMessage = err.response.data?.message || err.message;
+        }
+      } else if (err.request) {
+        errorMessage = "Network error. Check your connection.";
+      } else {
+        errorMessage = err.message;
       }
 
       alert(errorMessage);
@@ -87,10 +88,10 @@ export default function Register() {
             />
 
             <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                type="text"
+                placeholder="Login"
+                value={login}
+                onChange={e => setLogin(e.target.value)}
                 required
             />
 

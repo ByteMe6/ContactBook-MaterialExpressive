@@ -4,11 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="05dd15a6-baa4-4f7a-8a0b-f2c20e8a3b3c" name="Changes" comment="" />
+    <list default="true" id="05dd15a6-baa4-4f7a-8a0b-f2c20e8a3b3c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/api/axiosInstance.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/baseUrl.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/register.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/redux/authSlice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Contacts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Contacts.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/firebase/firebase.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/firebase/firebase.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/login/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/login/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/login/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/login/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/contactsSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/contactsSlice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -18,21 +41,21 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "ByteMe6"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ByteMe6&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/ByteMe6/ContactBook-MaterialExpressive.git",
-    "accountId": "4abe97e6-e6a3-4e37-821f-83d02babe15a"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ByteMe6/ContactBook-MaterialExpressive.git&quot;,
+    &quot;accountId&quot;: &quot;4abe97e6-e6a3-4e37-821f-83d02babe15a&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="36ZdzN2LCiUjryhsFbDZP8spdKO" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -40,18 +63,27 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "last_opened_file_path": "/Users/mac/Documents/web/ContactBook-MaterialExpressiveNew",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/mac/Documents/web/ContactBook-MaterialExpressive",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/redux" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -67,6 +99,7 @@
       <option name="presentableId" value="Default" />
       <updated>1765218289071</updated>
       <workItem from="1765218290471" duration="1604000" />
+      <workItem from="1765728871050" duration="4518000" />
     </task>
     <servers />
   </component>

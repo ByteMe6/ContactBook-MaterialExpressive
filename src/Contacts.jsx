@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { fetchContacts, addContact, deleteContact, setFilter } from './redux/contactsSlice';
-import { signOut } from "firebase/auth";
-import { auth } from "./firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
 export default function Contacts() {
@@ -44,9 +42,10 @@ export default function Contacts() {
     }
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await signOut(auth);
+      // Remove JWT token and user from localStorage
+      localStorage.removeItem("token");
       localStorage.removeItem("user");
       navigate("/login");
     } catch (err) {
@@ -119,3 +118,4 @@ export default function Contacts() {
       </main>
   );
 }
+

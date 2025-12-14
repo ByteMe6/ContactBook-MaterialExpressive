@@ -1,9 +1,5 @@
-// FILE: src/App.jsx (ОНОВЛЕНО)
-
-import {useEffect, useState} from 'react';
-import {Routes, Route, Navigate} from 'react-router-dom';
-import {onAuthStateChanged} from 'firebase/auth';
-import {auth} from './firebase/firebase';
+import { useState, useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Register from "./login/Register.jsx";
 import Login from "./login/Login.jsx";
 import Contacts from "./Contacts.jsx";
@@ -14,14 +10,21 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Listen for auth state changes
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
+    // Check if user is authenticated on mount
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
 
-    // Cleanup subscription
-    return () => unsubscribe();
+    if (token && userData) {
+      try {
+        setUser(JSON.parse(userData));
+      } catch (error) {
+        console.error("Failed to parse user data:", error);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
+    }
+
+    setLoading(false);
   }, []);
 
   // Show loading screen while checking auth state
@@ -37,28 +40,22 @@ function App() {
 
   return (
       <Routes>
-        {/* Кореневий шлях репозиторію (використовує basename) */}
         <Route
             path="/"
-            element={user ? <Navigate to="/contacts" replace/> : <Navigate to="/login" replace/>}
+            element={user ? <Navigate to="/contacts" replace /> : <Navigate to="/login" replace />}
         />
-        {/* /ContactBook-MaterialExpressive/login */}
         <Route
             path="/login"
-            element={user ? <Navigate to="/contacts" replace/> : <Login/>}
+            element={user ? <Navigate to="/contacts" replace /> : <Login />}
         />
-        {/* /ContactBook-MaterialExpressive/register */}
         <Route
             path="/register"
-            element={user ? <Navigate to="/contacts" replace/> : <Register/>}
+            element={user ? <Navigate to="/contacts" replace /> : <Register />}
         />
-        {/* /ContactBook-MaterialExpressive/contacts */}
         <Route
             path="/contacts"
-            element={user ? <Contacts/> : <Navigate to="/login" replace/>}
+            element={user ? <Contacts /> : <Navigate to="/login" replace />}
         />
-
-        {/* Видалено дублюючий шлях "/ContactBook-MaterialExpressive/" */}
       </Routes>
   );
 }
