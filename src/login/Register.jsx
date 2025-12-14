@@ -2,59 +2,95 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { register } from "../api/register";
 
-export default function Register() {
+export default function Register({ onRegisterSuccess }) {
   const [name, setName] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   async function handleRegister(e) {
     e.preventDefault();
+    setError("");
 
-    // ДОДАНА ПЕРЕВІРКА: Переконайтеся, що всі поля заповнені
-    if (!name.trim() || !login.trim() || !password.trim()) {
-      alert("Please fill in all fields (Name, Login, and Password).");
+    // Validation
+    if (!name.trim()) {
+      setError("Please enter your name");
+      return;
+    }
+
+    if (!login.trim()) {
+      setError("Please enter a login");
+      return;
+    }
+
+    if (login.length < 3) {
+      setError("Login must be at least 3 characters");
+      return;
+    }
+
+    if (!password) {
+      setError("Please enter a password");
       return;
     }
 
     if (password.length < 6) {
-      alert("Password must be at least 6 characters");
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // API expects { login, password }
+      console.log('📝 Attempting registration for:', login);
+
       const response = await register(login, password);
+      console.log('✅ Registration response:', response.data);
 
       // Extract JWT token from response
       const token = response.data.token || response.data.access_token;
       const userData = response.data.user || { login, name };
 
-      // Save JWT token to localStorage
+      if (!token) {
+        throw new Error('No token received from server');
+      }
+
+      // Save JWT token and user data to localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify({
         uid: userData.uid || userData.id,
-        name,
-        login
+        name: name.trim(),
+        login: userData.login || login
       }));
 
-      alert("Registration successful!");
+      console.log('✅ Registration successful, token saved');
+
+      // Call the callback to update parent state
+      if (onRegisterSuccess) {
+        onRegisterSuccess();
+      }
+
+      // Navigate to contacts page
       navigate("/contacts");
     } catch (err) {
-      console.error("Registration error:", err);
+      console.error("❌ Registration error:", err);
 
       let errorMessage = "Registration failed";
 
       if (err.response) {
         switch (err.response.status) {
           case 409:
-            errorMessage = "Login already in use";
+            errorMessage = "This login is already taken. Please choose another.";
             break;
           case 400:
-            errorMessage = err.response.data?.message || "Invalid login";
+            errorMessage = err.response.data?.message || "Invalid registration data";
             break;
           case 500:
             errorMessage = "Server error. Please try again later.";
@@ -63,12 +99,12 @@ export default function Register() {
             errorMessage = err.response.data?.message || err.message;
         }
       } else if (err.request) {
-        errorMessage = "Network error. Check your connection.";
+        errorMessage = "Network error. Please check your connection.";
       } else {
         errorMessage = err.message;
       }
 
-      alert(errorMessage);
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -79,19 +115,45 @@ export default function Register() {
         <div className="auth-box">
           <h2>Register</h2>
 
+          {error && (
+              <div style={{
+                background: 'rgba(242, 139, 130, 0.15)',
+                color: 'var(--error)',
+                padding: '12px 16px',
+                borderRadius: '12px',
+                marginBottom: '16px',
+                fontSize: '14px',
+                borderLeft: '3px solid var(--error)',
+                textAlign: 'left'
+              }}>
+                {error}
+              </div>
+          )}
+
           <form onSubmit={handleRegister}>
             <input
-                placeholder="Name"
+                type="text"
+                placeholder="Your Name"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={e => {
+                  setName(e.target.value);
+                  setError("");
+                }}
+                disabled={isLoading}
+                autoComplete="name"
                 required
             />
 
             <input
                 type="text"
-                placeholder="Login"
+                placeholder="Login (min 3 characters)"
                 value={login}
-                onChange={e => setLogin(e.target.value)}
+                onChange={e => {
+                  setLogin(e.target.value);
+                  setError("");
+                }}
+                disabled={isLoading}
+                autoComplete="username"
                 required
             />
 
@@ -99,12 +161,30 @@ export default function Register() {
                 type="password"
                 placeholder="Password (min 6 characters)"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={e => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
+                disabled={isLoading}
+                autoComplete="new-password"
+                required
+            />
+
+            <input
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={e => {
+                  setConfirmPassword(e.target.value);
+                  setError("");
+                }}
+                disabled={isLoading}
+                autoComplete="new-password"
                 required
             />
 
             <button type="submit" disabled={isLoading}>
-              {isLoading ? "Registering..." : "Register"}
+              {isLoading ? "Creating account..." : "Register"}
             </button>
           </form>
 

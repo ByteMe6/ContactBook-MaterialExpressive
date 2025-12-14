@@ -3,23 +3,23 @@ import { baseUrl } from "./baseUrl.js";
 
 const axiosInstance = axios.create({
   baseURL: baseUrl,
+  timeout: 10000, // 10 seconds timeout
+  headers: {
+    'Content-Type': 'application/json',
+  }
 });
 
-// Request interceptor - Add token to every request
+// Request interceptor - Add JWT token to every request
 axiosInstance.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("token");
 
-      // DEBUG: Log token and request
-      console.log("🔑 Making request to:", config.url);
-      console.log("🔑 Token exists:", !!token);
-      console.log("🔑 Token value:", token ? token.substring(0, 20) + "..." : "none");
-
+      // Add token to Authorization header if it exists
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
-        console.log("✅ Authorization header set:", config.headers.Authorization.substring(0, 30) + "...");
+        console.log(`🔑 Request to ${config.url} with token`);
       } else {
-        console.log("❌ No token found in localStorage!");
+        console.log(`⚠️ Request to ${config.url} without token`);
       }
 
       return config;
@@ -30,29 +30,60 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// Response interceptor - Handle 401 errors
+// Response interceptor - Handle errors globally
 axiosInstance.interceptors.response.use(
     (response) => {
-      console.log("✅ Response received:", response.status, response.config.url);
+      // Success response
+      console.log(`✅ ${response.config.method?.toUpperCase()} ${response.config.url}: ${response.status}`);
       return response;
     },
     (error) => {
-      console.error("❌ Response error:", {
-        status: error.response?.status,
-        url: error.config?.url,
+      // Error response
+      const status = error.response?.status;
+      const url = error.config?.url;
+      const method = error.config?.method?.toUpperCase();
+
+      console.error(`❌ ${method} ${url}:`, {
+        status,
         message: error.message,
         data: error.response?.data
       });
 
-      if (error.response && error.response.status === 401) {
-        console.log("🚪 401 Unauthorized - clearing auth and redirecting to login");
-        // Token expired or invalid
+      // Handle specific status codes
+      if (status === 401) {
+        // Unauthorized - Token expired or invalid
+        console.log("🚪 401 Unauthorized - Token invalid or expired");
+
+        // Clear authentication data
         localStorage.removeItem("token");
         localStorage.removeItem("user");
 
-        // Redirect to login page
-        window.location.href = "/login";
+        // Only redirect if not already on login/register page
+        const currentPath = window.location.pathname;
+        if (!currentPath.includes('/login') && !currentPath.includes('/register')) {
+          console.log("🔄 Redirecting to login page");
+          window.location.href = "/login";
+        }
+      } else if (status === 403) {
+        // Forbidden - User doesn't have permission
+        console.error("🚫 403 Forbidden - Access denied");
+      } else if (status === 404) {
+        // Not found
+        console.error("🔍 404 Not Found");
+      } else if (status === 429) {
+        // Too many requests
+        console.error("⏱️ 429 Too Many Requests - Rate limited");
+      } else if (status >= 500) {
+        // Server error
+        console.error("🔥 Server Error:", status);
+      } else if (error.code === 'ECONNABORTED') {
+        // Timeout
+        console.error("⏱️ Request timeout");
+      } else if (!error.response) {
+        // Network error
+        console.error("🌐 Network error - No response received");
       }
+
       return Promise.reject(error);
     }
 );
