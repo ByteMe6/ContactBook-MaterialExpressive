@@ -1,1 +1,1 @@
-export const baseUrl = "http://176.126.63.184:8080"
+export const baseUrl = "https://api.hellper.dev:8080"

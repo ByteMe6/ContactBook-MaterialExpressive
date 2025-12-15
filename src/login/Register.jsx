@@ -15,7 +15,6 @@ export default function Register({ onRegisterSuccess }) {
     e.preventDefault();
     setError("");
 
-    // Validation
     if (!name.trim()) {
       setError("Please enter your name");
       return;
@@ -54,7 +53,7 @@ export default function Register({ onRegisterSuccess }) {
       const response = await register(login, password);
       console.log('✅ Registration response:', response.data);
 
-      // Extract JWT token from response
+
       const token = response.data.token || response.data.access_token;
       const userData = response.data.user || { login, name };
 
@@ -62,7 +61,7 @@ export default function Register({ onRegisterSuccess }) {
         throw new Error('No token received from server');
       }
 
-      // Save JWT token and user data to localStorage
+
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify({
         uid: userData.uid || userData.id,
@@ -131,18 +130,18 @@ export default function Register({ onRegisterSuccess }) {
           )}
 
           <form onSubmit={handleRegister}>
-            <input
-                type="text"
-                placeholder="Your Name"
-                value={name}
-                onChange={e => {
-                  setName(e.target.value);
-                  setError("");
-                }}
-                disabled={isLoading}
-                autoComplete="name"
-                required
-            />
+            {/*<input*/}
+            {/*    type="text"*/}
+            {/*    placeholder="Your Name"*/}
+            {/*    value={name}*/}
+            {/*    onChange={e => {*/}
+            {/*      setName(e.target.value);*/}
+            {/*      setError("");*/}
+            {/*    }}*/}
+            {/*    disabled={isLoading}*/}
+            {/*    autoComplete="name"*/}
+            {/*    required*/}
+            {/*/>*/}
 
             <input
                 type="text"
