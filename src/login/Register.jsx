@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { register } from "../api/register";
 
 export default function Register({ onRegisterSuccess }) {
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,10 +15,10 @@ export default function Register({ onRegisterSuccess }) {
     e.preventDefault();
     setError("");
 
-    if (!name.trim()) {
-      setError("Please enter your name");
-      return;
-    }
+    // if (!name.trim()) {
+    //   setError("Please enter your name");
+    //   return;
+    // }
 
     if (!login.trim()) {
       setError("Please enter a login");
@@ -55,7 +55,7 @@ export default function Register({ onRegisterSuccess }) {
 
 
       const token = response.data.token || response.data.access_token;
-      const userData = response.data.user || { login, name };
+      const userData = response.data.user || { login};
 
       if (!token) {
         throw new Error('No token received from server');
@@ -65,7 +65,7 @@ export default function Register({ onRegisterSuccess }) {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify({
         uid: userData.uid || userData.id,
-        name: name.trim(),
+        // name: name.trim(),
         login: userData.login || login
       }));
 
