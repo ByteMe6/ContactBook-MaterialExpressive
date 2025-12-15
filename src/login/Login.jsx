@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login as loginAPI } from "../api/login";
 
-export default function Login({ onLoginSuccess }) {
+export default function Login({ setUser }) {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +13,6 @@ export default function Login({ onLoginSuccess }) {
     e.preventDefault();
     setError("");
 
-    // Validation
     if (!login.trim()) {
       setError("Please enter your login");
       return;
@@ -40,29 +39,31 @@ export default function Login({ onLoginSuccess }) {
         throw new Error('No token received from server');
       }
 
-      // Save JWT token and user data to localStorage
+      console.log('💾 Saving to localStorage...');
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify({
+
+      const userData = {
         ...user,
         login: user.login || login
-      }));
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
 
       console.log('✅ Login successful, token saved');
+      console.log('📦 User data:', userData);
+      console.log('🔄 Calling setUser...');
 
-      // Call the callback to update parent state
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
+      setUser(userData);
 
-      // Navigate to contacts page
+      console.log('🧭 Navigating to /contacts...');
       navigate("/contacts");
+
+      console.log('✅ Navigate called - if you see this but page didnt change, check App.jsx');
     } catch (err) {
       console.error("❌ Login error:", err);
 
       let errorMessage = "Login failed";
 
       if (err.response) {
-        // Server responded with error
         switch (err.response.status) {
           case 401:
             errorMessage = "Invalid login or password";
@@ -80,10 +81,8 @@ export default function Login({ onLoginSuccess }) {
             errorMessage = err.response.data?.message || "Login failed";
         }
       } else if (err.request) {
-        // Request was made but no response
         errorMessage = "Network error. Please check your connection.";
       } else {
-        // Something else happened
         errorMessage = err.message;
       }
 

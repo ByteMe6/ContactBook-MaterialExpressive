@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { fetchContacts, addContact, deleteContact, setFilter } from './redux/contactsSlice';
 import { useNavigate } from "react-router-dom";
 
-export default function Contacts() {
+export default function Contacts({ setUser }) {
   const { items, isLoading, error } = useAppSelector(state => state.contacts.contacts);
   const filter = useAppSelector(state => state.contacts.filter);
   const dispatch = useAppDispatch();
@@ -13,7 +13,6 @@ export default function Contacts() {
   const [newContactPhone, setNewContactPhone] = useState('');
   const [addError, setAddError] = useState('');
 
-  // Load contacts on mount
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
@@ -24,10 +23,8 @@ export default function Contacts() {
   );
 
   const handleAddContact = async () => {
-    // Reset previous error
     setAddError('');
 
-    // Validation
     if (!newContactName.trim()) {
       setAddError('Please enter a contact name');
       return;
@@ -38,7 +35,6 @@ export default function Contacts() {
       return;
     }
 
-    // Basic phone validation (optional)
     const phoneRegex = /^[+\d\s()-]+$/;
     if (!phoneRegex.test(newContactPhone)) {
       setAddError('Please enter a valid phone number');
@@ -52,7 +48,6 @@ export default function Contacts() {
 
     try {
       await dispatch(addContact(newContact)).unwrap();
-      // Clear inputs on success
       setNewContactName('');
       setNewContactPhone('');
       setAddError('');
@@ -73,17 +68,10 @@ export default function Contacts() {
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
-      try {
-        // Clear authentication
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-
-        // Navigate to login
-        navigate("/login");
-      } catch (err) {
-        console.error("Logout error:", err);
-        alert("Failed to logout");
-      }
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setUser(null);
+      navigate("/login");
     }
   };
 
