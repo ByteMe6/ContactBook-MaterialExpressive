@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05dd15a6-baa4-4f7a-8a0b-f2c20e8a3b3c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/addContact.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/getContacts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Contacts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Contacts.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/contactsSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/contactsSlice.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,11 +90,23 @@
       <updated>1765218289071</updated>
       <workItem from="1765218290471" duration="1604000" />
       <workItem from="1765728871050" duration="4946000" />
-      <workItem from="1765812320805" duration="204000" />
+      <workItem from="1765812320805" duration="3342000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/redux/contactsSlice.js</url>
+          <line>6</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

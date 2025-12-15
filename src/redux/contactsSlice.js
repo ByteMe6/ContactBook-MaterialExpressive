@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../api/axiosInstance';
+import {getContacts} from "../api/getContacts.js";
 
-// Fetch all contacts
+
 export const fetchContacts = createAsyncThunk(
     'contacts/fetchContacts',
     async (_, { rejectWithValue }) => {
       try {
-        const response = await axiosInstance.get('/contacts/');
-        console.log('📋 Contacts fetched:', response.data);
-        return response.data;
+        getContacts()
       } catch (error) {
         console.error('❌ Fetch contacts error:', error);
         const message = error.response?.data?.message
