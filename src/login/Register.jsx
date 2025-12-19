@@ -3,7 +3,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { register } from "../api/register";
 
 export default function Register({ onRegisterSuccess }) {
-  // const [name, setName] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -14,11 +13,6 @@ export default function Register({ onRegisterSuccess }) {
   async function handleRegister(e) {
     e.preventDefault();
     setError("");
-
-    // if (!name.trim()) {
-    //   setError("Please enter your name");
-    //   return;
-    // }
 
     if (!login.trim()) {
       setError("Please enter a login");
@@ -48,15 +42,11 @@ export default function Register({ onRegisterSuccess }) {
     setIsLoading(true);
 
     try {
-      console.log('📝 Attempting registration for:', login);
 
       const response = await register(login, password);
-      console.log('✅ Registration response:', response.data);
-
-
       const token = response.data.token || response.data.access_token;
       const userData = response.data.user || { login};
-
+      localStorage.setItem("token", token);
       if (!token) {
         throw new Error('No token received from server');
       }
@@ -65,18 +55,13 @@ export default function Register({ onRegisterSuccess }) {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify({
         uid: userData.uid || userData.id,
-        // name: name.trim(),
         login: userData.login || login
       }));
 
-      console.log('✅ Registration successful, token saved');
-
-      // Call the callback to update parent state
       if (onRegisterSuccess) {
         onRegisterSuccess();
       }
 
-      // Navigate to contacts page
       navigate("/contacts");
     } catch (err) {
       console.error("❌ Registration error:", err);
@@ -130,18 +115,6 @@ export default function Register({ onRegisterSuccess }) {
           )}
 
           <form onSubmit={handleRegister}>
-            {/*<input*/}
-            {/*    type="text"*/}
-            {/*    placeholder="Your Name"*/}
-            {/*    value={name}*/}
-            {/*    onChange={e => {*/}
-            {/*      setName(e.target.value);*/}
-            {/*      setError("");*/}
-            {/*    }}*/}
-            {/*    disabled={isLoading}*/}
-            {/*    autoComplete="name"*/}
-            {/*    required*/}
-            {/*/>*/}
 
             <input
                 type="text"

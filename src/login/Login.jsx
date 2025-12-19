@@ -26,12 +26,8 @@ export default function Login({ setUser }) {
     setIsLoading(true);
 
     try {
-      console.log('🔐 Attempting login for:', login);
-
       const response = await loginAPI(login, password);
-      console.log('✅ Login response:', response.data);
 
-      // Extract JWT token from response
       const token = response.data.token || response.data.access_token;
       const user = response.data.user || { login };
 
@@ -39,7 +35,6 @@ export default function Login({ setUser }) {
         throw new Error('No token received from server');
       }
 
-      console.log('💾 Saving to localStorage...');
       localStorage.setItem("token", token);
 
       const userData = {
@@ -48,16 +43,10 @@ export default function Login({ setUser }) {
       };
       localStorage.setItem("user", JSON.stringify(userData));
 
-      console.log('✅ Login successful, token saved');
-      console.log('📦 User data:', userData);
-      console.log('🔄 Calling setUser...');
-
       setUser(userData);
 
-      console.log('🧭 Navigating to /contacts...');
       navigate("/contacts");
 
-      console.log('✅ Navigate called - if you see this but page didnt change, check App.jsx');
     } catch (err) {
       console.error("❌ Login error:", err);
 

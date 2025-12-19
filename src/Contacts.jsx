@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { getContacts } from "./api/getContacts.js";
 import { createContact } from "./api/addContact.js";
-import { login as loginAPI } from "./api/login.js";
 import axiosInstance from "./api/axiosInstance.js";
 
 export default function Contacts({ setUser }) {
@@ -61,7 +60,6 @@ export default function Contacts({ setUser }) {
       setNewContactPhone("");
     } catch (err) {
       if (err.response?.status === 401) {
-        handle401(handleAddContact);
         return;
       }
       setAddError("Failed to add contact");
@@ -76,7 +74,6 @@ export default function Contacts({ setUser }) {
       setContacts(prev => prev.filter(c => c.id !== id));
     } catch (err) {
       if (err.response?.status === 401) {
-        handle401(() => handleDeleteContact(id));
         return;
       }
       alert("Failed to delete contact");
