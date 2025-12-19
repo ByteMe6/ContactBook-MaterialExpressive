@@ -16,58 +16,6 @@ export default function Contacts({ setUser }) {
   const [newContactPhone, setNewContactPhone] = useState('');
   const [addError, setAddError] = useState('');
 
-  // re-auth
-  const [showReauthModal, setShowReauthModal] = useState(false);
-  const [reauthPassword, setReauthPassword] = useState('');
-  const [reauthError, setReauthError] = useState('');
-  const [reauthLoading, setReauthLoading] = useState(false);
-  const [pendingAction, setPendingAction] = useState(null);
-
-  /* =========================
-     AUTH / RE-AUTH
-     ========================= */
-
-  const handle401 = (retryFn) => {
-    setPendingAction(() => retryFn);
-    setShowReauthModal(true);
-  };
-
-  const handleReauth = async () => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-    if (!reauthPassword || reauthPassword.trim().length === 0) {
-      setReauthError("Password required");
-      return;
-    }
-
-    try {
-      setReauthLoading(true);
-      setReauthError("");
-
-      const res = await loginAPI(
-          user.login,          // ← ВАЖНО
-          reauthPassword
-      );
-
-      const token = res.data.token || res.data.access_token;
-      if (!token) throw new Error("No token");
-
-      localStorage.setItem("token", token);
-
-      setShowReauthModal(false);
-      setReauthPassword("");
-
-      if (pendingAction) {
-        await pendingAction();
-        setPendingAction(null);
-      }
-    } catch {
-      setReauthError("Invalid password");
-    } finally {
-      setReauthLoading(false);
-    }
-  };
-
   /* =========================
      CONTACTS
      ========================= */
@@ -81,7 +29,7 @@ export default function Contacts({ setUser }) {
       setContacts(data);
     } catch (err) {
       if (err.response?.status === 401) {
-        handle401(loadContacts);
+        navigate("/login");
         return;
       }
       setError("Failed to load contacts");
@@ -146,7 +94,7 @@ export default function Contacts({ setUser }) {
      RENDER
      ========================= */
 
-  if (isLoading && !showReauthModal) {
+  if (isLoading) {
     return (
         <main>
           <div className="header-actions">
@@ -213,41 +161,6 @@ export default function Contacts({ setUser }) {
           </div>
         </main>
 
-        {/* RE-AUTH MODAL */}
-        {showReauthModal && (
-            <div style={{
-              position: 'fixed',
-              inset: 0,
-              background: 'rgba(0,0,0,.8)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div className="auth-box">
-                <h2>Session expired</h2>
-
-                {reauthError && <p style={{ color: 'var(--error)' }}>{reauthError}</p>}
-
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={reauthPassword}
-                    onChange={e => setReauthPassword(e.target.value)}
-                />
-
-                <button onClick={handleReauth} disabled={reauthLoading}>
-                  Continue
-                </button>
-
-                <button
-                    onClick={handleLogout}
-                    style={{ background: 'transparent', color: 'var(--on-surface-variant)' }}
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-        )}
       </>
   );
 }
