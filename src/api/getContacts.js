@@ -1,12 +1,6 @@
-import axios from "axios";
-import { baseUrl } from "./baseUrl.js";
+import axiosInstance from "./axiosInstance.js";
 
-export async function getContacts(jwt) {
-  const response = await axios.get(`${baseUrl}/contacts`, {
-    headers: {
-      Authorization: `Bearer ${jwt}`
-    }
-  });
-
-  return response.data;
+export async function getContacts() {
+  const res = await axiosInstance.get("/contacts");
+  return res.data;
 }

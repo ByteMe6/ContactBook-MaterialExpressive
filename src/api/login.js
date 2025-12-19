@@ -1,6 +1,10 @@
-import axiosInstance from "./axiosInstance.js";
+import axios from "axios";
+
+const baseURL = "https://api.hellper.dev";
 
 export function login(login, password) {
-  const body = { login, password };
-  return axiosInstance.post("/auth/login", body);
+  return axios.post(`${baseURL}/auth/login`, {
+    login,
+    password
+  });
 }
