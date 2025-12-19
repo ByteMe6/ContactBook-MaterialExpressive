@@ -1,20 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { store } from './redux/store';
 import App from './App';
 import './App.css';
 
-// Використовуємо базовий шлях, визначений у vite.config.js
-const BASENAME = '/ContactBook-MaterialExpressive/';
-
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-      <BrowserRouter basename={BASENAME}>
+      <HashRouter>
         <Provider store={store}>
           <App />
         </Provider>
-      </BrowserRouter>
+      </HashRouter>
     </React.StrictMode>
 );
