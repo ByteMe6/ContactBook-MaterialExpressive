@@ -2,7 +2,7 @@
 
 A contact book web app with JWT authentication, built with React and Material Expressive design.
 
-[Русский](./README.ru.md)
+**[Live Demo](https://byteme6.github.io/ContactBook-MaterialExpressive/)** · [Русский](./README.ru.md)
 
 ## Features
 
