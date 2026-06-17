@@ -2,7 +2,7 @@
 
 Веб-приложение записной книжки контактов с JWT-авторизацией, на React с дизайном Material Expressive.
 
-[English](./README.md)
+**[Демо](https://byteme6.github.io/ContactBook-MaterialExpressive/)** · [English](./README.md)
 
 ## Возможности
 
