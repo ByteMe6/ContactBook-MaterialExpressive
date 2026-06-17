@@ -1,16 +1,41 @@
-# React + Vite
+# ContactBook
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A contact book web app with JWT authentication, built with React and Material Expressive design.
 
-Currently, two official plugins are available:
+[Русский](./README.ru.md)
 
-- [@v[]()itejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- Register and log in with JWT
+- View, add, and delete contacts
+- Protected routes — contacts page requires authentication
+- Auth state persisted in localStorage
+- Redux Toolkit for state management
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+| | |
+|---|---|
+| Framework | React 19, React Router 7 |
+| State | Redux Toolkit |
+| HTTP | Axios |
+| Auth | JWT (localStorage) |
+| Backend | [api.hellper.dev](https://api.hellper.dev) |
+| Tooling | Vite 7, GitHub Pages |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Setup
+
+```bash
+git clone https://github.com/ByteMe6/ContactBook-MaterialExpressive
+cd ContactBook-MaterialExpressive
+npm install
+npm run dev
+```
+
+## Deploy
+
+```bash
+npm run deploy
+```
+
+Deploys to GitHub Pages.
